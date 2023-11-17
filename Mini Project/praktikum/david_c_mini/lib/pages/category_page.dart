@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -24,7 +23,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   child: Column(
                 children: [
                   Text(
-                    (isExpense) ? 'Add Expense' : 'Add Income',
+                    (isExpense) ? "Add Expense" : "Add Income",
                     style: GoogleFonts.montserrat(
                         fontSize: 18,
                         color: (isExpense) ? Colors.red : Colors.green),
@@ -32,10 +31,10 @@ class _CategoryPageState extends State<CategoryPage> {
                   SizedBox(height: 10),
                   TextFormField(
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(), hintText: 'Name'),
+                        border: OutlineInputBorder(), hintText: "Name"),
                   ),
                   SizedBox(height: 10),
-                  ElevatedButton(onPressed: () {}, child: Text('Save')),
+                  ElevatedButton(onPressed: () {}, child: Text("Save")),
                 ],
               )),
             ),
@@ -80,7 +79,7 @@ class _CategoryPageState extends State<CategoryPage> {
               leading: (isExpense)
                   ? Icon(Icons.upload, color: Colors.red)
                   : Icon(Icons.download, color: Colors.green),
-              title: Text('Sedekah'),
+              title: Text('Transportasi dan Bensin'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -101,6 +100,26 @@ class _CategoryPageState extends State<CategoryPage> {
                   ? Icon(Icons.upload, color: Colors.red)
                   : Icon(Icons.download, color: Colors.green),
               title: Text('Sedekah'),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                  SizedBox(width: 10),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                ],
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Card(
+            elevation: 10,
+            child: ListTile(
+              leading: (isExpense)
+                  ? Icon(Icons.upload, color: Colors.red)
+                  : Icon(Icons.download, color: Colors.green),
+              title: Text('Kebutuhan Anak'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

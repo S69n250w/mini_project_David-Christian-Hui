@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -111,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   title: Text("Rp. 2.000.000"),
-                  subtitle: Text("Salary"),
+                  subtitle: Text("Gaji Bulanan"),
                   leading: Container(
                     child: Icon(Icons.download, color: Colors.green),
                     decoration: BoxDecoration(
@@ -134,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   title: Text("Rp. 20.000"),
-                  subtitle: Text("Food"),
+                  subtitle: Text("Makan Siang"),
                   leading: Container(
                     child: Icon(Icons.upload, color: Colors.red),
                     decoration: BoxDecoration(
