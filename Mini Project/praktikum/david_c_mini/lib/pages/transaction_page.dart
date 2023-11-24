@@ -1,3 +1,4 @@
+import 'package:david_c_mini/models/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,10 +13,41 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+  final AppDatabase database = AppDatabase();
   bool isExpense = true;
+  late int type;
   List<String> list = ['Makan dan Jajan', 'Transportasi', 'Nonton Anime'];
   late String dropDownValue = list.first;
+  TextEditingController amountController = TextEditingController();
   TextEditingController dateController = TextEditingController();
+  TextEditingController detailController = TextEditingController();
+  Category? selectedCategory;
+
+  Future insert(int amount, int categoryId, DateTime date, String nameDetail) async {
+    DateTime now = DateTime.now();
+    final row = await database.into(database.transactions).insertReturning(
+      TransactionsCompanion.insert(
+        name: nameDetail,
+        category_id: categoryId,
+        transaction_date: date,
+        amount: amount,
+        type: type,
+        createdAt: now,
+        updatedAt: now));
+    print('APA INI: ' + row.toString());
+    // there is an insert into the database
+  }
+
+  Future<List<Category>> getAllCategory(int type) async {
+    return await database.getAllCategoryRepo(type);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    type = 2;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +67,8 @@ class _TransactionPageState extends State<TransactionPage> {
                   onChanged: (bool value) {
                     setState(() {
                       isExpense = value;
+                      type = (isExpense) ? 2 : 1;
+                      selectedCategory = null;
                     });
                   },
                   inactiveTrackColor: Colors.green[200],
@@ -53,6 +87,7 @@ class _TransactionPageState extends State<TransactionPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextFormField(
+                controller: amountController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     border: UnderlineInputBorder(), labelText: "Amount"),
@@ -66,6 +101,51 @@ class _TransactionPageState extends State<TransactionPage> {
                 style: GoogleFonts.montserrat(fontSize: 16)
               ),
             ),
+            FutureBuilder<List<Category>>(
+              future: getAllCategory(type),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.length > 0) {
+                      selectedCategory = snapshot.data!.first;
+                      print(snapshot.toString());
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: DropdownButton<Category>(
+                          value: (selectedCategory == null)
+                              ? snapshot.data!.first
+                              : selectedCategory,
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_downward),
+                          items: snapshot.data!.map((Category item) {
+                            return DropdownMenuItem<Category>(
+                              value: item,
+                              child: Text(item.name)
+                            );
+                          }).toList(),
+                            onChanged: (Category? value) {
+                              setState(() {
+                                selectedCategory = value;
+                              });
+                            }
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: Text("Empty data"),
+                    );
+                    }
+                  } else {
+                    return Center(
+                      child: Text("Has no data"),
+                    );
+                  }
+                }
+              }),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: DropdownButton<String>(
@@ -82,7 +162,7 @@ class _TransactionPageState extends State<TransactionPage> {
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
+              child: TextFormField(
                 readOnly: true,
                 controller: dateController,
                 decoration: InputDecoration(labelText: "Enter Date"),
@@ -102,8 +182,27 @@ class _TransactionPageState extends State<TransactionPage> {
                 },
               ),
             ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextFormField(
+                controller: detailController,
+                decoration: InputDecoration(
+                    border: UnderlineInputBorder(), labelText: "Detail"),
+              ),
+            ),
             SizedBox(height: 25),
-            Center(child: ElevatedButton(onPressed: () {}, child: Text("Save")))
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  insert(
+                    int.parse(amountController.text),
+                    selectedCategory!.id,
+                    DateTime.parse(dateController.text),
+                    detailController.text);
+                },
+                child: Text("Save"))
+            ),
           ],
         )),
       ),

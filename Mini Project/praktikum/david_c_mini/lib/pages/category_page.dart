@@ -178,67 +178,6 @@ class _CategoryPageState extends State<CategoryPage> {
             }
           },
         ),
-      
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 16),
-        //   child: Card(
-        //     elevation: 10,
-        //     child: ListTile(
-        //       leading: (isExpense)
-        //           ? Icon(Icons.upload, color: Colors.red)
-        //           : Icon(Icons.download, color: Colors.green),
-        //       title: Text('Transportasi dan Bensin'),
-        //       trailing: Row(
-        //         mainAxisSize: MainAxisSize.min,
-        //         children: [
-        //           IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-        //           SizedBox(width: 10),
-        //           IconButton(onPressed: () {}, icon: Icon(Icons.edit))
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 16),
-        //   child: Card(
-        //     elevation: 10,
-        //     child: ListTile(
-        //       leading: (isExpense)
-        //           ? Icon(Icons.upload, color: Colors.red)
-        //           : Icon(Icons.download, color: Colors.green),
-        //       title: Text('Sedekah'),
-        //       trailing: Row(
-        //         mainAxisSize: MainAxisSize.min,
-        //         children: [
-        //           IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-        //           SizedBox(width: 10),
-        //           IconButton(onPressed: () {}, icon: Icon(Icons.edit))
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 16),
-        //   child: Card(
-        //     elevation: 10,
-        //     child: ListTile(
-        //       leading: (isExpense)
-        //           ? Icon(Icons.upload, color: Colors.red)
-        //           : Icon(Icons.download, color: Colors.green),
-        //       title: Text('Kebutuhan Anak'),
-        //       trailing: Row(
-        //         mainAxisSize: MainAxisSize.min,
-        //         children: [
-        //           IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-        //           SizedBox(width: 10),
-        //           IconButton(onPressed: () {}, icon: Icon(Icons.edit))
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     ));
   }
