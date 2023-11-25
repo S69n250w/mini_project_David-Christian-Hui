@@ -200,6 +200,7 @@ class _TransactionPageState extends State<TransactionPage> {
                     selectedCategory!.id,
                     DateTime.parse(dateController.text),
                     detailController.text);
+                  Navigator.pop(context, true);
                 },
                 child: Text("Save"))
             ),

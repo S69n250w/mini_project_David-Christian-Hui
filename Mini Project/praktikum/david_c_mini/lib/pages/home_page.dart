@@ -1,9 +1,11 @@
+import 'package:david_c_mini/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final DateTime selectedDate;
+  const HomePage({super.key, required this.selectedDate});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -94,6 +96,11 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 16, fontWeight: FontWeight.bold)
               ),
             ),
+            StreamBuilder(
+
+              builder: (context, snapshot) {
+                return const Center();
+              }),
 
             // list transactions
             Padding(

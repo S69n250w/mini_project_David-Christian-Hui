@@ -1,24 +1,7 @@
-// import 'package:drift/drift.dart';
-
-// part 'database.g.dart';
-
-// class TodoItems extends Table {
-//   IntColumn get id => integer().autoIncrement()();
-//   TextColumn get title => text().withLength(min: 6, max: 32)();
-//   TextColumn get content => text().named('body')();
-//   IntColumn get category => integer().nullable()();
-// }
-
-// @DriftDatabase(tables: [TodoItems])
-// class AppDatabase extends _$AppDatabase {
-// }
-
-
-
 import 'dart:io';
-
 import 'package:david_c_mini/models/category.dart';
 import 'package:david_c_mini/models/transaction.dart';
+import 'package:david_c_mini/models/transaction_with_category.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
@@ -54,6 +37,19 @@ class AppDatabase extends _$AppDatabase {
   Future deleteCategoryRepo(int id) async {
     return (delete(categories)..where((tbl) => tbl.id.equals(id))).go();
   }
+
+  // Transaction
+
+  Stream<List<TransactionWithCategory>> getTransactionByDate(DateTime date) {
+    final query = (select(transactions).join([innerJoin(categories, categories.id.equalsExp(transactions.category_id))
+      ])..where(transactions.transaction_date.equals(date)));
+
+    return query.watch().map((rows) {
+      return rows.map((row) {
+        return TransactionWithCategory(row.readTable(transactions), row.readTable(categories));
+      }).toList();
+    });
+  }
 }
 
 LazyDatabase _openConnection() {
@@ -66,19 +62,3 @@ LazyDatabase _openConnection() {
     return NativeDatabase.createInBackground(file);
   });
 }
-
-
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   final database = AppDatabase();
-
-//   await database.into(database.todoItems).insert(TodoItemsCompanion.insert(
-//         title: 'todo: finish drift setup',
-//         content: 'We can now write queries and define our own tables.',
-//       ));
-//   List<TodoItem> allItems = await database.select(database.todoItems).get();
-
-//   print('items in database: $allItems');
-// }
