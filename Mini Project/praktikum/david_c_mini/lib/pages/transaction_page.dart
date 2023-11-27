@@ -111,7 +111,9 @@ class _TransactionPageState extends State<TransactionPage> {
                 } else {
                   if (snapshot.hasData) {
                     if (snapshot.data!.length > 0) {
-                      selectedCategory = snapshot.data!.first;
+                      selectedCategory = (selectedCategory == null)
+                          ? snapshot.data!.first
+                          : selectedCategory;
                       print(snapshot.toString());
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -127,11 +129,12 @@ class _TransactionPageState extends State<TransactionPage> {
                               child: Text(item.name)
                             );
                           }).toList(),
-                            onChanged: (Category? value) {
-                              setState(() {
-                                selectedCategory = value;
-                              });
-                            }
+                          onChanged: (Category? value) {
+                            setState(() {
+                              print('SELECTED CATEGORY: ' + value!.name);
+                              selectedCategory = value;
+                            });
+                          }
                         ),
                       );
                     } else {
@@ -176,7 +179,7 @@ class _TransactionPageState extends State<TransactionPage> {
             
                   if (pickedDate != null) {
                     String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-            
+
                     dateController.text = formattedDate;
                   }
                 },

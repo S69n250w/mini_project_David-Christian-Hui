@@ -579,7 +579,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required int type,
     required DateTime createdAt,
     required DateTime updatedAt,
-    this.deletedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(), required int category_id, required DateTime transaction_date, required int amount,
   })  : name = Value(name),
         type = Value(type),
         createdAt = Value(createdAt),
