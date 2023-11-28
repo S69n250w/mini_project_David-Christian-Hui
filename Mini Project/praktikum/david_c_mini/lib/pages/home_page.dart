@@ -1,6 +1,7 @@
 import 'package:david_c_mini/models/category.dart';
 import 'package:david_c_mini/models/database.dart';
 import 'package:david_c_mini/models/transaction_with_category.dart';
+import 'package:david_c_mini/pages/transaction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final AppDatabase dataBase = AppDatabase();
+  final AppDatabase database = AppDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             StreamBuilder<List<TransactionWithCategory>>(
-              stream: dataBase.getTransactionByDateRepo(widget.selectedDate),
+              stream: database.getTransactionByDateRepo(widget.selectedDate),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -122,9 +123,24 @@ class _HomePageState extends State<HomePage> {
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.delete),
+                                    IconButton(icon: Icon(Icons.delete), onPressed: () async {
+                                      await database.deleteTransactionRepo(
+                                        snapshot.data![index].transaction.id
+                                      );
+                                      setState(() {});
+                                    }),
                                     SizedBox(width: 10),
-                                    Icon(Icons.edit),
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => 
+                                                  TransactionPage(
+                                                    transactionWithCategory: 
+                                                        snapshot.data![index]
+                                                  )));
+                                    }),
                                   ],
                                 ),
                                 title: Text("Rp. " + 
@@ -137,7 +153,9 @@ class _HomePageState extends State<HomePage> {
                                     "}"
                                 ),
                                 leading: Container(
-                                  child: Icon(Icons.download, color: Colors.green),
+                                  child: (snapshot.data![index].category.type == 2)
+                                      ? Icon(Icons.upload, color: Colors.red)
+                                      : Icon(Icons.download, color: Colors.green),
                                   decoration: BoxDecoration(
                                     color: Colors.white, borderRadius: BorderRadius.circular(8)),
                                 ),
