@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:david_c_mini/models/category.dart';
-import 'package:david_c_mini/models/transaction.dart';
-import 'package:david_c_mini/models/transaction_with_category.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:david_c_mini/models/category.dart';
+import 'package:david_c_mini/models/transaction.dart';
+import 'package:david_c_mini/models/transaction_with_category.dart';
 
 part 'database.g.dart';
 
@@ -20,7 +20,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 6;
 
   // CRUD Category
 
@@ -29,16 +29,16 @@ class AppDatabase extends _$AppDatabase {
         .get();
   }
 
-  Future updateCategoryRepo(int id, String name) async {
+  Future updateCategoryRepo(int id, String newName) async {
     return (update(categories)..where((tbl) => tbl.id.equals(id)))
-      .write(CategoriesCompanion(name: Value(name)));
+      .write(CategoriesCompanion(name: Value(newName)));
   }
 
   Future deleteCategoryRepo(int id) async {
     return (delete(categories)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  // Transaction
+  //  CRUD Transaction
 
   Stream<List<TransactionWithCategory>> getTransactionByDateRepo(DateTime date) {
     final query = (select(transactions).join([innerJoin(categories, categories.id.equalsExp(transactions.category_id))
@@ -49,20 +49,6 @@ class AppDatabase extends _$AppDatabase {
         return TransactionWithCategory(row.readTable(transactions), row.readTable(categories));
       }).toList();
     });
-  }
-
-  Future updateTransactionRepo(int id, int amount, int categoryId, DateTime transactionDate, String nameDetail) async {
-    return (update(transactions)..where((tbl) => tbl.id.equals(id)))
-      .write(TransactionsCompanion(
-        name: Value(nameDetail),
-        amount: Value(amount),
-        category_id: Value(categoryId),
-        transaction_date: Value(transactionDate)
-      ));
-  }
-
-  Future deleteTransactionRepo(int id) async {
-    return (delete(transactions)..where((tbl) => tbl.id.equals(id))).go();
   }
 }
 
